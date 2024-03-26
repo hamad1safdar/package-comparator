@@ -55,7 +55,7 @@ const SearchBox: FC<SearchboxProps> = ({ onCompareClick }) => {
 
   const handleCompareClick = useCallback(() => {
     if (selected.length < 2) {
-      notify("error", "Error", "Please select 2 packages!");
+      notify("error", "Error", "Please select minimum of  2 packages!");
       return;
     }
     onCompareClick?.();

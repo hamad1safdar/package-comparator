@@ -22,21 +22,24 @@ const useSearchbox = () => {
     setQuery(value);
   }, []);
 
-  const handleSelect = React.useCallback((value: string) => {
-    if (selected.length === 2) {
-      notify("error", "Error", "More than 2 packages can not selected");
-      setQuery("");
-      return;
-    }
-    setSelected((prev) => {
-      //to avoid repeatedSelection
-      if (prev.includes(value)) {
-        return prev;
+  const handleSelect = React.useCallback(
+    (value: string) => {
+      if (selected.length === 2) {
+        notify("error", "Error", "Maximum of 2 packages can be selected!");
+        setQuery("");
+        return;
       }
-      return [...prev, value];
-    });
-    setQuery("");
-  }, []);
+      setSelected((prev) => {
+        //to avoid repeatedSelection
+        if (prev.includes(value)) {
+          return prev;
+        }
+        return [...prev, value];
+      });
+      setQuery("");
+    },
+    [selected]
+  );
 
   const handleClose = React.useCallback((tag: string) => {
     setSelected((prev) => {
