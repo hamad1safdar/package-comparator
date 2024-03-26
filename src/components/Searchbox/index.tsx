@@ -59,7 +59,7 @@ const SearchBox: FC<SearchboxProps> = ({ onCompareClick }) => {
       return;
     }
     onCompareClick?.();
-  }, [onCompareClick]);
+  }, [onCompareClick, selected]);
 
   return (
     <div className="search-box">
