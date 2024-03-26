@@ -30,5 +30,5 @@ export interface Detail {
 export type SearchboxHookParams = Array<NPMSugesstionsObject> | undefined;
 
 export interface SearchboxProps {
-  onCompareClick: () => void;
+  onCompareClick?: () => void;
 }
