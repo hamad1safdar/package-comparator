@@ -58,7 +58,7 @@ const SearchBox: FC<SearchboxProps> = ({ onCompareClick }) => {
       notify("error", "Error", "Please select minimum of  2 packages!");
       return;
     }
-    onCompareClick?.();
+    onCompareClick?.(selected);
   }, [onCompareClick, selected]);
 
   return (
@@ -80,7 +80,7 @@ const SearchBox: FC<SearchboxProps> = ({ onCompareClick }) => {
         {isLoading && <Spin size="large" />}
       </div>
       <div className="actions">
-        <Button type="primary" danger onClick={handleCompareClick}>
+        <Button type="primary" onClick={handleCompareClick}>
           Compare
         </Button>
       </div>

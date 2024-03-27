@@ -1,0 +1,33 @@
+.grid-table {
+  width: 70%;
+  margin-top: 35px;
+  border: 1px solid rgb(132, 132, 132);
+  border-radius: 4px;
+}
+
+.column {
+  border: 0.5px solid rgb(132, 132, 132);
+  padding: 10px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+}
+
+.row:nth-child(even) {
+  background: rgb(208, 207, 207);
+}
+
+.column.links {
+  display: flex;
+  gap: 20px;
+  text-transform: capitalize;
+}
+
+.column.links a {
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.column.name {
+  font-size: 18px;
+  font-weight: 700;
+}
