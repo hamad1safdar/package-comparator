@@ -4,7 +4,9 @@ import { useMutation } from "react-query";
 import SearchBox from "./components/Searchbox/index";
 import ComparisonTable from "./components/ComparisonTable";
 
-import { DATA_KEYS, getTableData } from "./utils";
+import { DATA_KEYS, getDownloadsData, getStats, getTableData } from "./utils";
+import DownloadsChart from "./components/Chart";
+import Recommendation from "./components/Recommendation";
 
 const fetchSelectedPackages = async (data: Array<string>) => {
   const response = await fetch("https://api.npms.io/v2/package/mget", {
@@ -67,6 +69,8 @@ function App() {
         dataSource={getTableData(result)}
         dataDefinition={DATA_KEYS}
       />
+      <DownloadsChart data={getDownloadsData(data)} />
+      <Recommendation data={getStats(data)} />
     </div>
   );
 }

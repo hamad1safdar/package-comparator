@@ -49,3 +49,9 @@ export interface TableProps {
   dataSource: TableDataSource | null;
   dataDefinition: Array<TableDataDefinition>;
 }
+
+export interface ChartsData {
+  date: string;
+  count: number;
+  category: string;
+}
