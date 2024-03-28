@@ -44,7 +44,7 @@ const SearchBox: FC<SearchboxProps> = ({ onCompareClick }) => {
       <Tag
         onClose={() => handleTagClose(tag)}
         key={tag}
-        color="red"
+        color="blue"
         className="tag"
         closable
       >

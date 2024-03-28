@@ -1,7 +1,10 @@
 import { FC, useMemo } from "react";
+
 import { calculateMarks } from "../../utils";
 
 import "./styles.css";
+import { useQuery } from "react-query";
+import { Spin, Tag } from "antd";
 
 const Recommendation: FC<{ data: { [x: string]: any } | null }> = ({
   data,
@@ -9,62 +12,101 @@ const Recommendation: FC<{ data: { [x: string]: any } | null }> = ({
   if (!data) return null;
 
   const result = useMemo(() => {
-    const [p1, p2] = Object.keys(data);
+    const keys = Object.keys(data);
 
-    const p1Result = calculateMarks(
-      data[p1].communityInterest,
-      data[p1].downloads,
-      data[p1].tests,
-      data[p1].carefullness
-    );
-    const p2Result = calculateMarks(
-      data[p2].communityInterest,
-      data[p2].downloads,
-      data[p2].tests,
-      data[p2].carefullness
-    );
+    const rating = keys.reduce((prev, currKey) => {
+      prev[currKey] = calculateMarks(
+        data[currKey].communityInterest,
+        data[currKey].downloads,
+        data[currKey].tests,
+        data[currKey].carefullness
+      );
+      return prev;
+    }, {} as { [x: string]: number });
 
-    const marks = { [p1]: p1Result, [p2]: p2Result };
+    let final;
 
-    console.log(marks);
-
-    if (marks[p1] > marks[p2]) {
-      return {
-        timesBetter: marks[p1] / marks[p2],
-        name: p1,
-        stars: data[p1].starsCount,
-        downloads: Math.floor(data[p1].downloads),
-        health: data[p1].health,
-        description: data[p1].description,
-      };
-    } else if (marks[p1] < marks[p2]) {
-      return {
-        timesBetter: marks[p2] / marks[p1],
-        name: p2,
-        stars: data[p2].starsCount,
-        downloads: Math.floor(data[p2].downloads),
-        health: data[p2].health,
-        description: data[p2].description,
-      };
+    const [p1, p2] = keys;
+    if (rating[p1] > rating[p2]) {
+      final = { recommended: p1, notRecommended: p2 };
+    } else if (rating[p1] < rating[p2]) {
+      final = { recommended: p2, notRecommended: p1 };
     } else {
-      return {};
+      final = { recommended: p1, notRecommended: p2 };
     }
+
+    return {
+      timesBetter: rating[final.recommended] / rating[final.notRecommended],
+      name: final.recommended,
+      stars: data[final.recommended].starsCount,
+      downloads: Math.floor(data[final.recommended].downloads),
+      health: Math.floor(data[final.recommended].health * 100),
+      description: data[final.recommended].description,
+      links: data[final.recommended].links,
+    };
   }, [data]);
+
+  const { isLoading, data: languages } = useQuery(
+    ["git/languages", result?.links?.repository],
+    async () => {
+      const repoLink = result?.links?.repository;
+      if (!repoLink) return null;
+      const [_o, _t, _f, owner, repo] = repoLink.split("/");
+      const response = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/languages`
+      );
+      if (!response.ok) {
+        throw new Error("Unable to fetch data from Github!");
+      }
+      return response.json();
+    }
+  );
 
   return (
     <div className="recommendation horizontal-center">
-      <div className="recommendation-heading">
+      <div className="recommendation-heading fw-600">
         {result.name} is {result.timesBetter?.toFixed(2)} times better.
       </div>
       <div className="recommendation-box">
         <div className="text-section">
-          <div>
-            <strong>Recommended:</strong> {result.name}
-          </div>
+          <span className="label color-black">Recommended: </span>
+          <span className="result fw-600">{result.name}</span>
           <div>{result.description}</div>
+          {result.links?.homepage && (
+            <>
+              Visit this{" "}
+              <a target="_blank" href={result.links.homepage}>
+                link
+              </a>{" "}
+              for more details.
+            </>
+          )}
         </div>
-        <div className="stats-section"></div>
+        <div className="stats-section">
+          {[
+            { label: "Downloads", value: result.downloads + "+" },
+            { label: "Stars", value: result.stars },
+            { label: "Health", value: result.health + "%" },
+          ].map((item) => (
+            <div className="stats-box" key={item.label}>
+              <div className="stats-heading color-black">{item.label}</div>
+              <div className="stats-value">{item.value}</div>
+            </div>
+          ))}
+        </div>
       </div>
+      {isLoading ? (
+        <Spin spinning={isLoading} />
+      ) : (
+        <div className="language-section">
+          <span className="color-black">Languagues </span>
+          {Object.keys(languages).map((language) => (
+            <Tag color="cyan" key={language}>
+              {language}
+            </Tag>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

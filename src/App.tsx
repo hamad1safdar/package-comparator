@@ -1,12 +1,13 @@
 import { useCallback, useMemo } from "react";
 import { useMutation } from "react-query";
+import { Spin } from "antd";
 
 import SearchBox from "./components/Searchbox/index";
 import ComparisonTable from "./components/ComparisonTable";
-
-import { DATA_KEYS, getDownloadsData, getStats, getTableData } from "./utils";
 import DownloadsChart from "./components/Chart";
 import Recommendation from "./components/Recommendation";
+
+import { DATA_KEYS, getDownloadsData, getStats, getTableData } from "./utils";
 
 const fetchSelectedPackages = async (data: Array<string>) => {
   const response = await fetch("https://api.npms.io/v2/package/mget", {
@@ -23,36 +24,9 @@ const fetchSelectedPackages = async (data: Array<string>) => {
 };
 
 function App() {
-  const { mutate, data } = useMutation({
+  const { mutate, data, isLoading } = useMutation({
     mutationFn: fetchSelectedPackages,
   });
-
-  const result = useMemo(() => {
-    if (data) {
-      return Object.keys(data).map((key) => {
-        const {
-          name,
-          version,
-          description,
-          keywords,
-          links,
-          publisher,
-          maintainers,
-          license,
-        } = data[key].collected.metadata;
-        return {
-          name,
-          version,
-          description,
-          keywords,
-          links,
-          publisher,
-          maintainers,
-          license,
-        };
-      });
-    } else return [];
-  }, [data]);
 
   const handleClick = useCallback(
     (selectedArr: Array<string>) => {
@@ -61,16 +35,23 @@ function App() {
     [mutate]
   );
 
+  const tableData = useMemo(() => getTableData(data), [data]);
+  const downloadsData = useMemo(() => getDownloadsData(data), [data]);
+  const statsData = useMemo(() => getStats(data), [data]);
+
   return (
     <div className="page">
       <h2>NPM Package Comparator</h2>
       <SearchBox onCompareClick={handleClick} />
-      <ComparisonTable
-        dataSource={getTableData(result)}
-        dataDefinition={DATA_KEYS}
-      />
-      <DownloadsChart data={getDownloadsData(data)} />
-      <Recommendation data={getStats(data)} />
+      {isLoading ? (
+        <Spin spinning={isLoading} fullscreen />
+      ) : (
+        <>
+          <ComparisonTable dataSource={tableData} dataDefinition={DATA_KEYS} />
+          <DownloadsChart data={downloadsData} />
+          <Recommendation data={statsData} />
+        </>
+      )}
     </div>
   );
 }

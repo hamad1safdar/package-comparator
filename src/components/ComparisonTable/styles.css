@@ -1,19 +1,19 @@
 .grid-table {
   width: 70%;
   margin-top: 35px;
-  border: 1px solid rgb(132, 132, 132);
+  border: 1px solid #91caff;
   border-radius: 4px;
 }
 
 .column {
-  border: 0.5px solid rgb(132, 132, 132);
+  border: 0.5px solid #91caff;
   padding: 10px;
   font-size: 16px;
   font-family: Arial, sans-serif;
 }
 
 .row:nth-child(even) {
-  background: rgb(208, 207, 207);
+  background: #e6f4ff;
 }
 
 .column.links {
