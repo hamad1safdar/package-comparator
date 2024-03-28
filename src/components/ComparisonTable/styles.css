@@ -31,3 +31,40 @@
   font-size: 18px;
   font-weight: 700;
 }
+
+@media (max-width: 768px) {
+  .grid-table {
+    width: 95%;
+  }
+  .column {
+    word-wrap: break-word;
+  }
+  .column.header {
+    display: none;
+  }
+  .column.links {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid-table {
+    width: 95%;
+  }
+  .column {
+    word-wrap: break-word;
+  }
+  .column.links {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 1441px) {
+  .column {
+    font-size: 24px;
+  }
+
+  .column.name {
+    font-size: 24px;
+  }
+}

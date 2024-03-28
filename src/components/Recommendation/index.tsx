@@ -101,7 +101,7 @@ const Recommendation: FC<{ data: { [x: string]: any } | null }> = ({
         <div className="language-section">
           <span className="color-black">Languagues </span>
           {Object.keys(languages).map((language) => (
-            <Tag color="cyan" key={language}>
+            <Tag className="lang-tag" color="cyan" key={language}>
               {language}
             </Tag>
           ))}

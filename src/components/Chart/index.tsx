@@ -3,6 +3,8 @@ import { Line } from "@ant-design/charts";
 
 import { ChartsData } from "../../types/types";
 
+import "./styles.css";
+
 const DownloadsChart: FC<{ data: Array<ChartsData> | null }> = ({ data }) => {
   if (!data) return null;
 
@@ -11,13 +13,16 @@ const DownloadsChart: FC<{ data: Array<ChartsData> | null }> = ({ data }) => {
     xField: "date",
     yField: "count",
     colorField: "category",
+    style: {
+      lineWidth: 3,
+    }
   };
 
   return (
-    <>
+    <div className="charts-container">
       <h3>Downloads</h3>
-      <Line style={{ width: "100%" }} {...config} />
-    </>
+      <Line containerStyle={{ width: "100%" }} className="line" {...config} />
+    </div>
   );
 };
 
