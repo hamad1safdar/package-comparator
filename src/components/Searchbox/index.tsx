@@ -80,7 +80,7 @@ const SearchBox: FC<SearchboxProps> = ({ onCompareClick }) => {
         {isLoading && <Spin size="large" />}
       </div>
       <div className="actions">
-        <Button type="primary" onClick={handleCompareClick}>
+        <Button className="action-btn" type="primary" onClick={handleCompareClick}>
           Compare
         </Button>
       </div>

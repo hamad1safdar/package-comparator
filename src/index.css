@@ -37,3 +37,16 @@ body {
   flex-direction: column;
   padding-bottom: 35px;
 }
+
+@media (min-width: 1441px) {
+  h2 {
+    font-size: 36px;
+  }
+  h3 {
+    font-size: 28px;
+  }
+
+  .line canvas {
+    font-size: 36px;
+  }
+}

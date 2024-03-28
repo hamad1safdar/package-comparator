@@ -27,6 +27,14 @@
   line-height: 25px;
 }
 
+.text-section a {
+  font-weight: 600;
+}
+
+.text-section a:visited {
+  color: inherit;
+}
+
 .stats-section {
   flex: 1;
 }
@@ -57,4 +65,70 @@
 
 .color-black {
   color: black;
+}
+
+@media (max-width: 768px) {
+  .recommendation {
+    width: 95%;
+  }
+
+  .recommendation-box {
+    flex-direction: column;
+  }
+
+  .stats-section {
+    margin-top: 15px;
+  }
+
+  .stats-box {
+    display: block;
+    margin: 0 auto;
+    margin-top: 5px;
+    padding: 15px;
+    width: 50%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .recommendation {
+    width: 80%;
+  }
+
+  .recommendation-box {
+    flex-direction: column;
+  }
+
+  .stats-section {
+    margin-top: 15px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .recommendation {
+    width: 70%;
+  }
+
+  .recommendation-box {
+    flex-direction: column;
+  }
+
+  .stats-section {
+    margin-top: 15px;
+    text-align: center;
+  }
+}
+
+@media (min-width: 1441px) {
+  .recommendation {
+    font-size: 24px;
+  }
+
+  .recommendation-heading {
+    font-size: 36px;
+  }
+
+  .lang-tag {
+    font-size: 24px;
+    padding: 5px 8px;
+  }
 }

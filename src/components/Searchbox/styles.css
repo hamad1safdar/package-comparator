@@ -25,3 +25,29 @@
 .actions {
   text-align: center;
 }
+
+@media (max-width: 768px) {
+  .input-section {
+    width: 95%;
+  }
+}
+
+@media (min-width: 1441px) {
+  .input {
+    height: 50px;
+  }
+
+  .ant-select-selection-placeholder {
+    font-size: 24px;
+  }
+
+  .tag {
+    font-size: 36px;
+  }
+
+  .action-btn {
+    font-size: 24px;
+    height: 45px;
+    font-weight: 600;
+  }
+}
