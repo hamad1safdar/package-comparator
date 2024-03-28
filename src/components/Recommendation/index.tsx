@@ -1,4 +1,5 @@
 import { FC, useMemo } from "react";
+
 import { calculateMarks } from "../../utils";
 
 import "./styles.css";
@@ -9,46 +10,37 @@ const Recommendation: FC<{ data: { [x: string]: any } | null }> = ({
   if (!data) return null;
 
   const result = useMemo(() => {
-    const [p1, p2] = Object.keys(data);
+    const keys = Object.keys(data);
 
-    const p1Result = calculateMarks(
-      data[p1].communityInterest,
-      data[p1].downloads,
-      data[p1].tests,
-      data[p1].carefullness
-    );
-    const p2Result = calculateMarks(
-      data[p2].communityInterest,
-      data[p2].downloads,
-      data[p2].tests,
-      data[p2].carefullness
-    );
+    const rating = keys.reduce((prev, currKey) => {
+      prev[currKey] = calculateMarks(
+        data[currKey].communityInterest,
+        data[currKey].downloads,
+        data[currKey].tests,
+        data[currKey].carefullness
+      );
+      return prev;
+    }, {} as { [x: string]: number });
 
-    const marks = { [p1]: p1Result, [p2]: p2Result };
+    let final;
 
-    console.log(marks);
-
-    if (marks[p1] > marks[p2]) {
-      return {
-        timesBetter: marks[p1] / marks[p2],
-        name: p1,
-        stars: data[p1].starsCount,
-        downloads: Math.floor(data[p1].downloads),
-        health: data[p1].health,
-        description: data[p1].description,
-      };
-    } else if (marks[p1] < marks[p2]) {
-      return {
-        timesBetter: marks[p2] / marks[p1],
-        name: p2,
-        stars: data[p2].starsCount,
-        downloads: Math.floor(data[p2].downloads),
-        health: data[p2].health,
-        description: data[p2].description,
-      };
+    const [p1, p2] = keys;
+    if (rating[p1] > rating[p2]) {
+      final = { recommended: p1, notRecommended: p2 };
+    } else if (rating[p1] < rating[p2]) {
+      final = { recommended: p2, notRecommended: p1 };
     } else {
       return {};
     }
+
+    return {
+      timesBetter: rating[final.recommended] / rating[final.notRecommended],
+      name: final.recommended,
+      stars: data[final.recommended].starsCount,
+      downloads: Math.floor(data[final.recommended].downloads),
+      health: data[final.recommended].health,
+      description: data[final.recommended].description,
+    };
   }, [data]);
 
   return (

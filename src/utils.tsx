@@ -9,23 +9,44 @@ export const CONSTANTS = {
   GITHUB_BASE_URL: "",
 };
 
-export const getTableData = (
-  result: Array<{ [x: string]: any }>
-): TableDataSource | null => {
-  const newResult = (result as Array<{ [x: string]: any }>).reduce<{
-    [x: string]: any;
-  }>((prev, curr) => {
-    Object.keys(curr).forEach((key) => {
-      if (Array.isArray(prev[key])) {
-        prev[key] = [...prev[key], curr[key]];
-      } else {
-        prev[key] = [curr[key]];
-      }
-    });
-    return prev;
-  }, {});
-
-  return Object.keys(newResult).length ? newResult : null;
+export const getTableData = (data: {
+  [x: string]: any;
+}): TableDataSource | null => {
+  if (!data) return null;
+  return Object.keys(data)
+    .map((key) => {
+      const {
+        name,
+        version,
+        description,
+        keywords,
+        links,
+        publisher,
+        maintainers,
+        license,
+      } = data[key].collected.metadata;
+      return {
+        name,
+        version,
+        description,
+        keywords,
+        links,
+        publisher,
+        maintainers,
+        license,
+      };
+    })
+    .reduce((prev, curr) => {
+      Object.keys(curr).forEach((key) => {
+        const currKey = key as keyof typeof curr;
+        if (Array.isArray(prev[key])) {
+          prev[key] = [...prev[key], curr[currKey]];
+        } else {
+          prev[key] = [curr[currKey]];
+        }
+      });
+      return prev;
+    }, {} as { [x: string]: any });
 };
 
 export const DATA_KEYS: Array<TableDataDefinition> = [
@@ -122,32 +143,21 @@ export const getDownloadsData = (data: {
 
 export const getStats = (data: { [x: string]: any }) => {
   if (!data) return null;
-  const [p1Key, p2Key] = Object.keys(data);
-
-  return {
-    [p1Key]: {
-      starsCount: data[p1Key]["collected"]["github"]?.["starsCount"] || "N/A",
-      carefullness: data[p1Key]["evaluation"]["quality"]["carefulness"],
-      tests: data[p1Key]["evaluation"]["quality"]["tests"],
-      health: data[p1Key]["evaluation"]["quality"]["health"],
-      communityInterest:
-        data[p1Key]["evaluation"]["popularity"]["communityInterest"],
-      downloads: data[p1Key]["evaluation"]["popularity"]["downloadsCount"],
-      description: data[p1Key]["collected"]["metadata"]["description"],
-      links: data[p1Key]["collected"]["metadata"]["links"],
-    },
-    [p2Key]: {
-      starsCount: data[p2Key]["collected"]["github"]?.["starsCount"] || "N/A",
-      carefullness: data[p2Key]["evaluation"]["quality"]["carefulness"],
-      tests: data[p2Key]["evaluation"]["quality"]["tests"],
-      health: data[p2Key]["evaluation"]["quality"]["health"],
-      communityInterest:
-        data[p2Key]["evaluation"]["popularity"]["communityInterest"],
-      downloads: data[p2Key]["evaluation"]["popularity"]["downloadsCount"],
-      description: data[p2Key]["collected"]["metadata"]["description"],
-      links: data[p2Key]["collected"]["metadata"]["links"],
-    },
-  };
+  return Object.keys(data).reduce((prev, currKey) => {
+    const collected = data[currKey]["collected"];
+    const evaluation = data[currKey]["evaluation"];
+    prev[currKey] = {
+      starsCount: collected["github"]?.["starsCount"] || "N/A",
+      carefullness: evaluation["quality"]?.["carefulness"] ?? 0,
+      tests: evaluation["quality"]?.["tests"] ?? 0,
+      health: evaluation["quality"]?.["health"] ?? "N/A",
+      communityInterest: evaluation["popularity"]?.["communityInterest"] ?? 0,
+      downloads: evaluation["popularity"]?.["downloadsCount"] ?? 0,
+      description: collected["metadata"]?.["description"] || "N/A",
+      links: collected["metadata"]["links"]?.["homepage"],
+    };
+    return prev;
+  }, {} as { [x: string]: any });
 };
 
 export const calculateMarks = (
