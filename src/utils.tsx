@@ -154,7 +154,7 @@ export const getStats = (data: { [x: string]: any }) => {
       communityInterest: evaluation["popularity"]?.["communityInterest"] ?? 0,
       downloads: evaluation["popularity"]?.["downloadsCount"] ?? 0,
       description: collected["metadata"]?.["description"] || "N/A",
-      links: collected["metadata"]["links"]?.["homepage"],
+      links: collected["metadata"]["links"],
     };
     return prev;
   }, {} as { [x: string]: any });
