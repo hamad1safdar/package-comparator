@@ -37,6 +37,10 @@
     height: 50px;
   }
 
+  input[type=search] {
+    font-size: 24px;
+  }
+
   .ant-select-selection-placeholder {
     font-size: 24px;
   }
