@@ -3,6 +3,14 @@
   margin-top: 35px;
   border: 1px solid #91caff;
   border-radius: 4px;
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    width: 95%;
+  }
 }
 
 .column {
@@ -10,6 +18,17 @@
   padding: 10px;
   font-size: 16px;
   font-family: Arial, sans-serif;
+  word-wrap: break-word;
+
+  @media (min-width: 1441px) {
+    font-size: 24px;
+  }
+}
+
+.column.header {
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
 .row:nth-child(even) {
@@ -20,6 +39,14 @@
   display: flex;
   gap: 20px;
   text-transform: capitalize;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    flex-direction: column;
+  }
 }
 
 .column.links a {
@@ -30,41 +57,7 @@
 .column.name {
   font-size: 18px;
   font-weight: 700;
-}
-
-@media (max-width: 768px) {
-  .grid-table {
-    width: 95%;
-  }
-  .column {
-    word-wrap: break-word;
-  }
-  .column.header {
-    display: none;
-  }
-  .column.links {
-    flex-direction: column;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .grid-table {
-    width: 95%;
-  }
-  .column {
-    word-wrap: break-word;
-  }
-  .column.links {
-    flex-direction: column;
-  }
-}
-
-@media (min-width: 1441px) {
-  .column {
-    font-size: 24px;
-  }
-
-  .column.name {
+  @media (min-width: 1441px) {
     font-size: 24px;
   }
 }

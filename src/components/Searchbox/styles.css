@@ -5,11 +5,18 @@
 .input-section {
   width: 80%;
   max-width: 500px;
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 }
 
 .input {
   width: 100%;
   height: 35px;
+  @media (min-width: 1441px) {
+    height: 50px;
+  }
 }
 
 .name-section {
@@ -20,36 +27,30 @@
   font-size: 16px;
   padding: 10px 15px;
   font-weight: 600;
+
+  @media (min-width: 1441px) {
+    font-size: 36px;
+  }
 }
 
 .actions {
   text-align: center;
 }
 
-@media (max-width: 768px) {
-  .input-section {
-    width: 95%;
+input[type="search"] {
+  @media (min-width: 1441px) {
+    font-size: 24px;
   }
 }
 
-@media (min-width: 1441px) {
-  .input {
-    height: 50px;
-  }
-
-  input[type=search] {
+.ant-select-selection-placeholder {
+  @media (min-width: 1441px) {
     font-size: 24px;
   }
+}
 
-  .ant-select-selection-placeholder {
-    font-size: 24px;
-  }
-
-  .tag {
-    font-size: 36px;
-  }
-
-  .action-btn {
+.action-btn {
+  @media (min-width: 1441px) {
     font-size: 24px;
     height: 45px;
     font-weight: 600;
