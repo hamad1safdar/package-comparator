@@ -46,7 +46,7 @@ export interface TableDataSource {
 }
 
 export interface TableProps {
-  dataSource: TableDataSource | null;
+  dataSource: Array<ParsedResponse> | null;
   dataDefinition: Array<TableDataDefinition>;
 }
 
