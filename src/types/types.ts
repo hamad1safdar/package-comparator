@@ -55,3 +55,26 @@ export interface ChartsData {
   count: number;
   category: string;
 }
+
+export interface Stats {
+  [key: string]: {
+    starsCount: number | string;
+    carefullness: number;
+    tests: number;
+    health: number | string;
+    communityInterest: number;
+    downloads: number;
+    description: string;
+    links: { [x: string]: string } | null;
+  };
+}
+
+export interface RecommendationResult {
+  timesBetter: number;
+  name: string;
+  stars: number;
+  downloads: number;
+  health: number;
+  description: string;
+  links: { [x: string]: string } | null;
+}

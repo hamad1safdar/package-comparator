@@ -1,5 +1,5 @@
-import { useCallback, useMemo } from "react";
-import { useMutation } from "react-query";
+import { useCallback, useMemo, useState } from "react";
+import { useQuery } from "react-query";
 import { Spin } from "antd";
 
 import SearchBox from "./components/Searchbox/index";
@@ -7,7 +7,7 @@ import ComparisonTable from "./components/ComparisonTable";
 import DownloadsChart from "./components/Chart";
 import Recommendation from "./components/Recommendation";
 
-import { DATA_KEYS, getDownloadsData, getStats, getTableData } from "./utils";
+import { DATA_KEYS, parseDataForChart, getStats, getTableData } from "./utils";
 
 const fetchSelectedPackages = async (data: Array<string>) => {
   const response = await fetch("https://api.npms.io/v2/package/mget", {
@@ -24,19 +24,21 @@ const fetchSelectedPackages = async (data: Array<string>) => {
 };
 
 function App() {
-  const { mutate, data, isLoading } = useMutation({
-    mutationFn: fetchSelectedPackages,
-  });
-
-  const handleClick = useCallback(
-    (selectedArr: Array<string>) => {
-      mutate(selectedArr);
-    },
-    [mutate]
+  const [selected, setSelected] = useState<Array<string>>([]);
+  const { isLoading, data } = useQuery(
+    ["info/selected", selected],
+    () => fetchSelectedPackages(selected),
+    {
+      enabled: selected.length == 2,
+    }
   );
 
+  const handleClick = useCallback((selectedArr: Array<string>) => {
+    setSelected(selectedArr);
+  }, []);
+
   const tableData = useMemo(() => getTableData(data), [data]);
-  const downloadsData = useMemo(() => getDownloadsData(data), [data]);
+  const chartData = useMemo(() => parseDataForChart(data), [data]);
   const statsData = useMemo(() => getStats(data), [data]);
 
   return (
@@ -48,7 +50,7 @@ function App() {
       ) : (
         <>
           <ComparisonTable dataSource={tableData} dataDefinition={DATA_KEYS} />
-          <DownloadsChart data={downloadsData} />
+          <DownloadsChart data={chartData} />
           <Recommendation data={statsData} />
         </>
       )}
