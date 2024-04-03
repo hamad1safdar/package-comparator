@@ -56,19 +56,6 @@ export interface ChartsData {
   category: string;
 }
 
-export interface Stats {
-  [key: string]: {
-    starsCount: number | string;
-    carefullness: number;
-    tests: number;
-    health: number | string;
-    communityInterest: number;
-    downloads: number;
-    description: string;
-    links: { [x: string]: string } | null;
-  };
-}
-
 export interface RecommendationResult {
   timesBetter: number;
   name: string;
@@ -77,4 +64,32 @@ export interface RecommendationResult {
   health: number;
   description: string;
   links: { [x: string]: string } | null;
+}
+
+export interface PersonObject {
+  username: string;
+  email: string;
+}
+
+export interface DownloadsStat {
+  from: string;
+  to: string;
+  count: number;
+}
+
+export interface ParsedResponse {
+  name: string;
+  version: string;
+  description: string;
+  publisher: PersonObject | {};
+  maintainers: Array<PersonObject>;
+  links: { [x: string]: string };
+  license: string;
+  downloadsStats: Array<DownloadsStat>;
+  starsCount: number;
+  carefulness: number;
+  tests: number;
+  health: number;
+  downloadsCount: number;
+  communityInterest: number;
 }

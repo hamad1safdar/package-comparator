@@ -7,7 +7,12 @@ import ComparisonTable from "./components/ComparisonTable";
 import DownloadsChart from "./components/Chart";
 import Recommendation from "./components/Recommendation";
 
-import { DATA_KEYS, parseDataForChart, getStats, getTableData } from "./utils";
+import {
+  DATA_KEYS,
+  parseDataForChart,
+  getTableData,
+  parseNPMSResponse,
+} from "./utils";
 
 const fetchSelectedPackages = async (data: Array<string>) => {
   const response = await fetch("https://api.npms.io/v2/package/mget", {
@@ -29,7 +34,7 @@ function App() {
     ["info/selected", selected],
     () => fetchSelectedPackages(selected),
     {
-      enabled: selected.length == 2,
+      enabled: selected.length === 2,
     }
   );
 
@@ -39,7 +44,6 @@ function App() {
 
   const tableData = useMemo(() => getTableData(data), [data]);
   const chartData = useMemo(() => parseDataForChart(data), [data]);
-  const statsData = useMemo(() => getStats(data), [data]);
 
   return (
     <div className="page">
@@ -48,11 +52,16 @@ function App() {
       {isLoading ? (
         <Spin spinning={isLoading} fullscreen />
       ) : (
-        <>
-          <ComparisonTable dataSource={tableData} dataDefinition={DATA_KEYS} />
-          <DownloadsChart data={chartData} />
-          <Recommendation data={statsData} />
-        </>
+        data && (
+          <>
+            <ComparisonTable
+              dataSource={tableData}
+              dataDefinition={DATA_KEYS}
+            />
+            <DownloadsChart data={chartData} />
+            <Recommendation data={parseNPMSResponse(data)} />
+          </>
+        )
       )}
     </div>
   );

@@ -2,12 +2,8 @@ import {
   TableDataSource,
   TableDataDefinition,
   ChartsData,
+  ParsedResponse,
 } from "./types/types";
-
-export const CONSTANTS = {
-  NPMS_BASE_URL: "",
-  GITHUB_BASE_URL: "",
-};
 
 export const getTableData = (data: {
   [x: string]: any;
@@ -102,63 +98,36 @@ export const DATA_KEYS: Array<TableDataDefinition> = [
   },
 ];
 
-export const getDownloadsData = (data: {
+export const parseDataForChart = (data: {
   [x: string]: any;
 }): Array<ChartsData> | null => {
   if (!data) return null;
-
-  const [p1Key, p2Key] = Object.keys(data);
-  const p1Downloads = (
-    data[p1Key]["collected"]["npm"]["downloads"] as Array<{
-      from: string;
-      to: string;
-      count: number;
-    }>
-  ).map((item) => {
-    return {
-      date: item.from.split("T")[0],
-      count: item.count,
-      category: p1Key,
-    };
-  });
-
-  const p2Downloads = (
-    data[p2Key]["collected"]["npm"]["downloads"] as Array<{
-      from: string;
-      to: string;
-      count: number;
-    }>
-  ).map((item) => {
-    return {
-      date: item.from.split("T")[0],
-      count: item.count,
-      category: p2Key,
-    };
-  });
+  const [p1Downloads, p2Downloads] = Object.keys(data).map((key) =>
+    extractDownloads(key, data)
+  );
   const result = [...p1Downloads, ...p2Downloads].sort((a, b) => {
     return b.date.localeCompare(a.date);
   });
   return result;
 };
 
-export const getStats = (data: { [x: string]: any }) => {
-  if (!data) return null;
-  return Object.keys(data).reduce((prev, currKey) => {
-    const collected = data[currKey]["collected"];
-    const evaluation = data[currKey]["evaluation"];
-    prev[currKey] = {
-      starsCount: collected["github"]?.["starsCount"] || "N/A",
-      carefullness: evaluation["quality"]?.["carefulness"] ?? 0,
-      tests: evaluation["quality"]?.["tests"] ?? 0,
-      health: evaluation["quality"]?.["health"] ?? "N/A",
-      communityInterest: evaluation["popularity"]?.["communityInterest"] ?? 0,
-      downloads: evaluation["popularity"]?.["downloadsCount"] ?? 0,
-      description: collected["metadata"]?.["description"] || "N/A",
-      links: collected["metadata"]["links"],
+const extractDownloads = (key: string, data: { [x: string]: any }) => {
+  return (
+    data[key]["collected"]["npm"]["downloads"] as Array<{
+      from: string;
+      to: string;
+      count: number;
+    }>
+  ).map((item) => {
+    return {
+      date: item.from.split("T")[0],
+      count: item.count,
+      category: key,
     };
-    return prev;
-  }, {} as { [x: string]: any });
+  });
 };
+
+
 
 export const calculateMarks = (
   communityInterest: number,
@@ -191,4 +160,31 @@ export const calculateMarks = (
   const scaledScore = totalScore * 10;
 
   return scaledScore;
+};
+
+export const parseNPMSResponse = (data: {
+  [x: string]: any;
+}): Array<ParsedResponse> => {
+  return Object.keys(data).map((packageKey) => {
+    const metadata = data[packageKey]["collected"]["metadata"];
+    const npm = data[packageKey]["collected"]["npm"];
+    const github = data[packageKey]["collected"]["github"];
+    const evaluation = data[packageKey]["evaluation"];
+    return {
+      name: metadata.name,
+      version: metadata.version,
+      description: metadata?.description || "N/A",
+      publisher: metadata?.publisher || {},
+      maintainers: metadata?.maintainers || [],
+      links: metadata?.links || {},
+      license: metadata?.license || "N/A",
+      downloadsStats: npm?.downloads || [],
+      starsCount: github?.starsCount || 0,
+      carefulness: evaluation["quality"]?.["carefulness"] ?? 0,
+      tests: evaluation["quality"]?.["tests"] ?? 0,
+      health: evaluation["quality"]?.["health"] ?? 0,
+      downloadsCount: evaluation["popularity"]?.["downloadsCount"] ?? 0,
+      communityInterest: evaluation["popularity"]?.["communityInterest"] ?? 0,
+    };
+  });
 };
