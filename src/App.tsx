@@ -7,12 +7,7 @@ import ComparisonTable from "./components/ComparisonTable";
 import DownloadsChart from "./components/Chart";
 import Recommendation from "./components/Recommendation";
 
-import {
-  DATA_KEYS,
-  parseDataForChart,
-  getTableData,
-  parseNPMSResponse,
-} from "./utils";
+import { DATA_KEYS, getTableData, parseNPMSResponse } from "./utils";
 
 const fetchSelectedPackages = async (data: Array<string>) => {
   const response = await fetch("https://api.npms.io/v2/package/mget", {
@@ -43,7 +38,6 @@ function App() {
   }, []);
 
   const tableData = useMemo(() => getTableData(data), [data]);
-  const chartData = useMemo(() => parseDataForChart(data), [data]);
 
   return (
     <div className="page">
@@ -58,7 +52,7 @@ function App() {
               dataSource={tableData}
               dataDefinition={DATA_KEYS}
             />
-            <DownloadsChart data={chartData} />
+            <DownloadsChart data={parseNPMSResponse(data)} />
             <Recommendation data={parseNPMSResponse(data)} />
           </>
         )

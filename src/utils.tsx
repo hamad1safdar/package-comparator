@@ -1,7 +1,6 @@
 import {
   TableDataSource,
   TableDataDefinition,
-  ChartsData,
   ParsedResponse,
 } from "./types/types";
 
@@ -97,70 +96,6 @@ export const DATA_KEYS: Array<TableDataDefinition> = [
       data[0].email,
   },
 ];
-
-export const parseDataForChart = (data: {
-  [x: string]: any;
-}): Array<ChartsData> | null => {
-  if (!data) return null;
-  const [p1Downloads, p2Downloads] = Object.keys(data).map((key) =>
-    extractDownloads(key, data)
-  );
-  const result = [...p1Downloads, ...p2Downloads].sort((a, b) => {
-    return b.date.localeCompare(a.date);
-  });
-  return result;
-};
-
-const extractDownloads = (key: string, data: { [x: string]: any }) => {
-  return (
-    data[key]["collected"]["npm"]["downloads"] as Array<{
-      from: string;
-      to: string;
-      count: number;
-    }>
-  ).map((item) => {
-    return {
-      date: item.from.split("T")[0],
-      count: item.count,
-      category: key,
-    };
-  });
-};
-
-
-
-export const calculateMarks = (
-  communityInterest: number,
-  downloads: number,
-  tests: number,
-  carefullness: number
-) => {
-  tests = (tests + carefullness) / 2;
-
-  const weightCommunityInterest = 0.2;
-  const weightDownloads = 0.5;
-  const weightTests = 0.2;
-
-  const maxCommunityInterest = 10;
-  const maxDownloads = 1000;
-  const maxTests = 100;
-
-  const normalizedCommunityInterest = Math.min(
-    communityInterest / maxCommunityInterest,
-    1
-  );
-  const normalizedDownloads = Math.min(downloads / maxDownloads, 1);
-  const normalizedTests = Math.min(tests + carefullness / maxTests, 1);
-
-  const totalScore =
-    normalizedCommunityInterest * weightCommunityInterest +
-    normalizedDownloads * weightDownloads +
-    normalizedTests * weightTests;
-
-  const scaledScore = totalScore * 10;
-
-  return scaledScore;
-};
 
 export const parseNPMSResponse = (data: {
   [x: string]: any;
