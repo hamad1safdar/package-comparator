@@ -36,34 +36,38 @@ const calculateMarks = (
 export const prepareResult = (
   data: NPMSParsedResponse
 ): RecommendationResult => {
-  const rating = data.reduce((prev, currStats) => {
-    const { communityInterest, downloadsCount, tests, carefulness } = currStats;
-    prev[currStats.name] = calculateMarks(
+  const rating = data.reduce((ratings, packageItem) => {
+    const { communityInterest, downloadsCount, tests, carefulness } =
+      packageItem;
+    ratings[packageItem.name] = calculateMarks(
       communityInterest,
       downloadsCount,
       tests,
       carefulness
     );
-    return prev;
+    return ratings;
   }, {} as { [x: string]: number });
 
-  const [p1, p2] = data.map((packageItem) => packageItem.name);
+  //get keys for comparison purposes
+  const [package1Key, package2Key] = data.map(
+    (packageItem) => packageItem.name
+  );
 
   let final: { recommended: string; notRecommended: string };
 
-  if (rating[p1] > rating[p2]) {
-    final = { recommended: p1, notRecommended: p2 };
-  } else if (rating[p1] < rating[p2]) {
-    final = { recommended: p2, notRecommended: p1 };
+  if (rating[package1Key] > rating[package2Key]) {
+    final = { recommended: package1Key, notRecommended: package2Key };
+  } else if (rating[package1Key] < rating[package2Key]) {
+    final = { recommended: package2Key, notRecommended: package1Key };
   } else {
-    final = { recommended: p1, notRecommended: p2 };
+    final = { recommended: package1Key, notRecommended: package2Key };
   }
 
   const recommendedPackage = data.find(
     (packageItem) => packageItem.name === final.recommended
   );
 
-  //recommendedPackage will never be undefined. Therefor, error can be ignored.
+  //recommendedPackage will never be undefined. Therefore, error can be ignored.
   //adding a check to suppress TS warning
   if (!recommendedPackage) throw new Error("Error");
 

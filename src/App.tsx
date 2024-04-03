@@ -74,7 +74,7 @@ const fetchSelectedPackages = async (data: Array<string>) => {
   if (!response.ok) {
     throw new Error("Unable to fetch libs record from npm!");
   }
-  return response.json();
+  return parseNPMSResponse(await response.json());
 };
 
 function App() {
@@ -100,12 +100,9 @@ function App() {
       ) : (
         data && (
           <>
-            <ComparisonTable
-              dataSource={parseNPMSResponse(data)}
-              dataDefinition={DATA_KEYS}
-            />
-            <DownloadsChart data={parseNPMSResponse(data)} />
-            <Recommendation data={parseNPMSResponse(data)} />
+            <ComparisonTable dataSource={data} dataDefinition={DATA_KEYS} />
+            <DownloadsChart data={data} />
+            <Recommendation data={data} />
           </>
         )
       )}

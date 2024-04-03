@@ -11,10 +11,11 @@ export const transformDataForCharts = (
   const [p1Downloads, p2Downloads] = data.map((packageItem) =>
     transformDownloadData(packageItem.downloadsStats, packageItem.name)
   );
-  const result = [...p1Downloads, ...p2Downloads].sort((a, b) => {
+
+  //sorting, on the basisi of dates, is required to avoid to plotting non-crossing, independent lines on the chart
+  return [...p1Downloads, ...p2Downloads].sort((a, b) => {
     return b.date.localeCompare(a.date);
   });
-  return result;
 };
 
 const transformDownloadData = (
