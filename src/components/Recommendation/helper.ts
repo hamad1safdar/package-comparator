@@ -1,4 +1,4 @@
-import { RecommendationResult, ParsedResponse } from "../../types/types";
+import { RecommendationResult, NPMSParsedResponse } from "../../types/types";
 
 const calculateMarks = (
   communityInterest: number,
@@ -34,7 +34,7 @@ const calculateMarks = (
 };
 
 export const prepareResult = (
-  data: Array<ParsedResponse>
+  data: NPMSParsedResponse
 ): RecommendationResult => {
   const rating = data.reduce((prev, currStats) => {
     const { communityInterest, downloadsCount, tests, carefulness } = currStats;

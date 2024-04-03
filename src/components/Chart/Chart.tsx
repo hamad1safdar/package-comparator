@@ -2,13 +2,11 @@ import { FC } from "react";
 import { Line } from "@ant-design/charts";
 
 import { transformDataForCharts } from "./helper";
-import { ParsedResponse } from "../../types/types";
+import { DownloadChartsProps } from "../../types/types";
 
 import "./styles.css";
 
-const DownloadsChart: FC<{ data: Array<ParsedResponse> | null }> = ({
-  data,
-}) => {
+const DownloadsChart: FC<DownloadChartsProps> = ({ data }) => {
   if (!data) return null;
 
   const config = {

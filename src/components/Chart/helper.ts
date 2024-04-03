@@ -1,7 +1,11 @@
-import { ChartsData, DownloadsStat, ParsedResponse } from "../../types/types";
+import {
+  ChartsData,
+  DownloadsStat,
+  NPMSParsedResponse,
+} from "../../types/types";
 
 export const transformDataForCharts = (
-  data: Array<ParsedResponse>
+  data: NPMSParsedResponse
 ): Array<ChartsData> | null => {
   if (!data) return null;
   const [p1Downloads, p2Downloads] = data.map((packageItem) =>

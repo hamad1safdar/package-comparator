@@ -2,12 +2,12 @@ import { FC, useMemo } from "react";
 import { useQuery } from "react-query";
 import { Spin, Tag } from "antd";
 
-import { ParsedResponse } from "../../types/types";
+import { RecommendationProps } from "../../types/types";
 import { prepareResult } from "./helper";
 
 import "./styles.css";
 
-const Recommendation: FC<{ data: Array<ParsedResponse> }> = ({ data }) => {
+const Recommendation: FC<RecommendationProps> = ({ data }) => {
   if (!data) return null;
 
   const result = useMemo(() => prepareResult(data), [data]);

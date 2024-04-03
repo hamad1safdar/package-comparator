@@ -1,8 +1,8 @@
-import { ParsedResponse } from "./types/types";
+import { NPMSParsedResponse } from "./types/types";
 
 export const parseNPMSResponse = (data: {
   [x: string]: any;
-}): Array<ParsedResponse> => {
+}): NPMSParsedResponse => {
   return Object.keys(data).map((packageKey) => {
     const metadata = data[packageKey]["collected"]["metadata"];
     const npm = data[packageKey]["collected"]["npm"];

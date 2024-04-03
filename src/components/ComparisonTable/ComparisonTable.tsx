@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Col, Row } from "antd";
 
-import { ParsedResponse, TableProps } from "../../types/types";
+import { PackageInfo, TableProps } from "../../types/types";
 
 import "./styles.css";
 
@@ -10,7 +10,7 @@ const ComparisonTable: FC<TableProps> = ({ dataSource, dataDefinition }) => {
   return (
     <div className="grid-table">
       {dataDefinition.map((item) => {
-        const key = item.key as keyof ParsedResponse;
+        const key = item.key as keyof PackageInfo;
         return (
           <Row className="row" key={item.key}>
             <Col className="column header" md={6} sm={4} lg={8} xl={4}>

@@ -46,7 +46,7 @@ export interface TableDataSource {
 }
 
 export interface TableProps {
-  dataSource: Array<ParsedResponse> | null;
+  dataSource: Array<PackageInfo> | null;
   dataDefinition: Array<TableDataDefinition>;
 }
 
@@ -77,7 +77,7 @@ export interface DownloadsStat {
   count: number;
 }
 
-export interface ParsedResponse {
+export interface PackageInfo {
   name: string;
   version: string;
   description: string;
@@ -92,4 +92,14 @@ export interface ParsedResponse {
   health: number;
   downloadsCount: number;
   communityInterest: number;
+}
+
+export type NPMSParsedResponse = Array<PackageInfo>;
+
+export interface DownloadChartsProps {
+  data: NPMSParsedResponse;
+}
+
+export interface RecommendationProps {
+  data: NPMSParsedResponse;
 }
