@@ -1,50 +1,16 @@
 import { FC, useMemo } from "react";
-
-import { calculateMarks } from "../../utils";
-
-import "./styles.css";
 import { useQuery } from "react-query";
 import { Spin, Tag } from "antd";
 
-const Recommendation: FC<{ data: { [x: string]: any } | null }> = ({
-  data,
-}) => {
+import { RecommendationProps } from "../../types/types";
+import { prepareResult } from "./helper";
+
+import "./styles.css";
+
+const Recommendation: FC<RecommendationProps> = ({ data }) => {
   if (!data) return null;
 
-  const result = useMemo(() => {
-    const keys = Object.keys(data);
-
-    const rating = keys.reduce((prev, currKey) => {
-      prev[currKey] = calculateMarks(
-        data[currKey].communityInterest,
-        data[currKey].downloads,
-        data[currKey].tests,
-        data[currKey].carefullness
-      );
-      return prev;
-    }, {} as { [x: string]: number });
-
-    let final;
-
-    const [p1, p2] = keys;
-    if (rating[p1] > rating[p2]) {
-      final = { recommended: p1, notRecommended: p2 };
-    } else if (rating[p1] < rating[p2]) {
-      final = { recommended: p2, notRecommended: p1 };
-    } else {
-      final = { recommended: p1, notRecommended: p2 };
-    }
-
-    return {
-      timesBetter: rating[final.recommended] / rating[final.notRecommended],
-      name: final.recommended,
-      stars: data[final.recommended].starsCount,
-      downloads: Math.floor(data[final.recommended].downloads),
-      health: Math.floor(data[final.recommended].health * 100),
-      description: data[final.recommended].description,
-      links: data[final.recommended].links,
-    };
-  }, [data]);
+  const result = useMemo(() => prepareResult(data), [data]);
 
   const { isLoading, data: languages } = useQuery(
     ["git/languages", result?.links?.repository],

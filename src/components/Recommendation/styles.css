@@ -3,6 +3,20 @@
   text-align: center;
   padding-top: 100px;
   color: #0958d9;
+  @media (max-width: 768px) {
+    width: 95%;
+  }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    width: 80%;
+  }
+  @media (min-width: 1025px) and (max-width: 1440px) {
+    width: 70%;
+  }
+  @media (min-width: 1441px) {
+    width: 70%;
+    max-width: 1000px;
+    font-size: 24px;
+  }
 }
 
 .recommendation-heading {
@@ -11,6 +25,9 @@
   border-radius: 4px;
   padding: 20px;
   font-size: 28px;
+  @media (min-width: 1441px) {
+    font-size: 36px;
+  }
 }
 
 .recommendation-box {
@@ -20,6 +37,15 @@
   padding: 10px;
   text-align: left;
   margin-top: 15px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    flex-direction: column;
+  }
+  @media (min-width: 1025px) and (max-width: 1440px) {
+    flex-direction: column;
+  }
 }
 
 .text-section {
@@ -37,6 +63,16 @@
 
 .stats-section {
   flex: 1;
+  @media (max-width: 768px) {
+    margin-top: 15px;
+  }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    margin-top: 15px;
+  }
+  @media (min-width: 1025px) and (max-width: 1440px) {
+    margin-top: 15px;
+    text-align: center;
+  }
 }
 
 .stats-box {
@@ -49,6 +85,14 @@
   text-align: center;
   padding: 10px 0;
   line-height: 28px;
+
+  @media (max-width: 768px) {
+    display: block;
+    margin: 0 auto;
+    margin-top: 5px;
+    padding: 15px;
+    width: 50%;
+  }
 }
 
 .language-section {
@@ -67,69 +111,8 @@
   color: black;
 }
 
-@media (max-width: 768px) {
-  .recommendation {
-    width: 95%;
-  }
-
-  .recommendation-box {
-    flex-direction: column;
-  }
-
-  .stats-section {
-    margin-top: 15px;
-  }
-
-  .stats-box {
-    display: block;
-    margin: 0 auto;
-    margin-top: 5px;
-    padding: 15px;
-    width: 50%;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .recommendation {
-    width: 80%;
-  }
-
-  .recommendation-box {
-    flex-direction: column;
-  }
-
-  .stats-section {
-    margin-top: 15px;
-  }
-}
-
-@media (min-width: 1025px) and (max-width: 1440px) {
-  .recommendation {
-    width: 70%;
-  }
-
-  .recommendation-box {
-    flex-direction: column;
-  }
-
-  .stats-section {
-    margin-top: 15px;
-    text-align: center;
-  }
-}
-
-@media (min-width: 1441px) {
-  .recommendation {
-    width: 70%;
-    max-width: 1000px;
-    font-size: 24px;
-  }
-
-  .recommendation-heading {
-    font-size: 36px;
-  }
-
-  .lang-tag {
+.lang-tag {
+  @media (min-width: 1441px) {
     font-size: 24px;
     padding: 5px 8px;
   }

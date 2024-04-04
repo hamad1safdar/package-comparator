@@ -46,7 +46,7 @@ export interface TableDataSource {
 }
 
 export interface TableProps {
-  dataSource: TableDataSource | null;
+  dataSource: Array<PackageInfo> | null;
   dataDefinition: Array<TableDataDefinition>;
 }
 
@@ -54,4 +54,52 @@ export interface ChartsData {
   date: string;
   count: number;
   category: string;
+}
+
+export interface RecommendationResult {
+  timesBetter: number;
+  name: string;
+  stars: number;
+  downloads: number;
+  health: number;
+  description: string;
+  links: { [x: string]: string } | null;
+}
+
+export interface PersonObject {
+  username: string;
+  email: string;
+}
+
+export interface DownloadsStat {
+  from: string;
+  to: string;
+  count: number;
+}
+
+export interface PackageInfo {
+  name: string;
+  version: string;
+  description: string;
+  publisher: PersonObject | {};
+  maintainers: Array<PersonObject>;
+  links: { [x: string]: string };
+  license: string;
+  downloadsStats: Array<DownloadsStat>;
+  starsCount: number;
+  carefulness: number;
+  tests: number;
+  health: number;
+  downloadsCount: number;
+  communityInterest: number;
+}
+
+export type NPMSParsedResponse = Array<PackageInfo>;
+
+export interface DownloadChartsProps {
+  data: NPMSParsedResponse;
+}
+
+export interface RecommendationProps {
+  data: NPMSParsedResponse;
 }

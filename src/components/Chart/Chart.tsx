@@ -1,21 +1,22 @@
 import { FC } from "react";
 import { Line } from "@ant-design/charts";
 
-import { ChartsData } from "../../types/types";
+import { transformDataForCharts } from "./helper";
+import { DownloadChartsProps } from "../../types/types";
 
 import "./styles.css";
 
-const DownloadsChart: FC<{ data: Array<ChartsData> | null }> = ({ data }) => {
+const DownloadsChart: FC<DownloadChartsProps> = ({ data }) => {
   if (!data) return null;
 
   const config = {
-    data,
+    data: transformDataForCharts(data),
     xField: "date",
     yField: "count",
     colorField: "category",
     style: {
       lineWidth: 3,
-    }
+    },
   };
 
   return (
