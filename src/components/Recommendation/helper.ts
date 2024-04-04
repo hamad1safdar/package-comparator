@@ -36,7 +36,7 @@ const calculateMarks = (
 export const prepareResult = (
   data: NPMSParsedResponse
 ): RecommendationResult => {
-  const rating = data.reduce((ratings, packageItem) => {
+  const overallRatings = data.reduce((ratings, packageItem) => {
     const { communityInterest, downloadsCount, tests, carefulness } =
       packageItem;
     ratings[packageItem.name] = calculateMarks(
@@ -53,18 +53,18 @@ export const prepareResult = (
     (packageItem) => packageItem.name
   );
 
-  let final: { recommended: string; notRecommended: string };
+  let recommendation: { recommended: string; notRecommended: string };
 
-  if (rating[package1Key] > rating[package2Key]) {
-    final = { recommended: package1Key, notRecommended: package2Key };
-  } else if (rating[package1Key] < rating[package2Key]) {
-    final = { recommended: package2Key, notRecommended: package1Key };
+  if (overallRatings[package1Key] > overallRatings[package2Key]) {
+    recommendation = { recommended: package1Key, notRecommended: package2Key };
+  } else if (overallRatings[package1Key] < overallRatings[package2Key]) {
+    recommendation = { recommended: package2Key, notRecommended: package1Key };
   } else {
-    final = { recommended: package1Key, notRecommended: package2Key };
+    recommendation = { recommended: package1Key, notRecommended: package2Key };
   }
 
   const recommendedPackage = data.find(
-    (packageItem) => packageItem.name === final.recommended
+    (packageItem) => packageItem.name === recommendation.recommended
   );
 
   //recommendedPackage will never be undefined. Therefore, error can be ignored.
@@ -72,8 +72,10 @@ export const prepareResult = (
   if (!recommendedPackage) throw new Error("Error");
 
   return {
-    timesBetter: rating[final.recommended] / rating[final.notRecommended],
-    name: final.recommended,
+    timesBetter:
+      overallRatings[recommendation.recommended] /
+      overallRatings[recommendation.notRecommended],
+    name: recommendation.recommended,
     stars: recommendedPackage.starsCount,
     downloads: Math.floor(recommendedPackage.downloadsCount),
     health: Math.floor(recommendedPackage.health * 100),

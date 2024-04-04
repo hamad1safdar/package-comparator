@@ -5,6 +5,25 @@ import { PackageInfo, TableProps } from "../../types/types";
 
 import "./styles.css";
 
+/**
+ * Previously, a helper function was being used to transform data and following was the shape of it
+ * {
+ *  name: ['name1', 'name2'],
+ *  version: ['version1', 'version2'],
+ *  description: ['description1', 'description2']
+ *  .
+ *  .
+ *  and so on
+ * }
+ *
+ * Currently, there is no transformation involved except for the global transformation function.
+ * And now, following is the shape of data source:
+ * [
+ *   {name: 'name1', version: 'version1', description: 'description1'.....},
+ *   {name: 'name2', version: 'version2', description: 'description2'.....}
+ * ]
+ */
+
 const ComparisonTable: FC<TableProps> = ({ dataSource, dataDefinition }) => {
   if (!dataSource) return null;
   return (

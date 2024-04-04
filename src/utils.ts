@@ -1,5 +1,13 @@
 import { NPMSParsedResponse } from "./types/types";
 
+
+/**
+ * Currently, we only have a single global utility function that is being used, to transform the response of NPMS,
+ * at query level. All other utility functions have been shifted to their usage context. E.g. Utility function to calculate the results
+ * now can be found at src/Recommendation/helper.ts 
+ * 
+ */
+
 export const parseNPMSResponse = (data: {
   [x: string]: any;
 }): NPMSParsedResponse => {
